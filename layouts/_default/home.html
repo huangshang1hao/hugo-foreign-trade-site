@@ -1,0 +1,73 @@
+{{ define "main" }}
+<section class="hero">
+    <div class="container">
+        <h1 class="hero-title">{{ .Title }}</h1>
+        <p class="hero-subtitle">{{ .Summary }}</p>
+    </div>
+</section>
+
+{{ if eq .Language "zh" }}
+<section class="products-preview">
+    <div class="container">
+        <h2>最新产品</h2>
+        <div class="products-grid">
+            {{ range first 6 (where .Site.RegularPages "Section" "products") }}
+                {{ if eq .Language "zh" }}
+                <div class="product-card">
+                    <div class="product-image">
+                        {{ if .Params.image }}
+                            <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+                        {{ else }}
+                            <div class="placeholder">{{ .Title }}</div>
+                        {{ end }}
+                    </div>
+                    <h3>{{ .Title }}</h3>
+                    <p>{{ .Summary }}</p>
+                    <a href="{{ .RelPermalink }}" class="btn">查看详情</a>
+                </div>
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>需要了解更多？</h2>
+        <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">联系我们</a>
+    </div>
+</section>
+{{ else }}
+<section class="products-preview">
+    <div class="container">
+        <h2>Latest Products</h2>
+        <div class="products-grid">
+            {{ range first 6 (where .Site.RegularPages "Section" "products") }}
+                {{ if eq .Language "en" }}
+                <div class="product-card">
+                    <div class="product-image">
+                        {{ if .Params.image }}
+                            <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+                        {{ else }}
+                            <div class="placeholder">{{ .Title }}</div>
+                        {{ end }}
+                    </div>
+                    <h3>{{ .Title }}</h3>
+                    <p>{{ .Summary }}</p>
+                    <a href="{{ .RelPermalink }}" class="btn">View Details</a>
+                </div>
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>Want to learn more?</h2>
+        <a href="{{ "/contact/" | relURL }}" class="btn btn-primary">Contact Us</a>
+    </div>
+</section>
+{{ end }}
+
+{{ end }}

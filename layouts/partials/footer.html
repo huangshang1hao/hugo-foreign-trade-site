@@ -1,0 +1,52 @@
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                {{ if eq .Language "zh" }}
+                    <h3>关于我们</h3>
+                    <p>我们是一家专业的外贸公司，致力于为全球客户提供优质的产品和服务。</p>
+                {{ else }}
+                    <h3>About Us</h3>
+                    <p>We are a professional foreign trade company dedicated to providing quality products and services to global customers.</p>
+                {{ end }}
+            </div>
+
+            <div class="footer-section">
+                {{ if eq .Language "zh" }}
+                    <h3>快速链接</h3>
+                {{ else }}
+                    <h3>Quick Links</h3>
+                {{ end }}
+                <ul>
+                    {{ range .Site.Menus.main }}
+                        <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                {{ if eq .Language "zh" }}
+                    <h3>联系方式</h3>
+                    <p>电话: +86 XXX XXXX XXXX</p>
+                    <p>邮箱: info@example.com</p>
+                    <p>地址: 中国...</p>
+                {{ else }}
+                    <h3>Contact</h3>
+                    <p>Phone: +86 XXX XXXX XXXX</p>
+                    <p>Email: info@example.com</p>
+                    <p>Address: China...</p>
+                {{ end }}
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                {{ if eq .Language "zh" }}
+                    &copy; {{ now.Year }} {{ .Site.Title }}. 保留所有权利。
+                {{ else }}
+                    &copy; {{ now.Year }} {{ .Site.Title }}. All rights reserved.
+                {{ end }}
+            </p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外贸网站后台管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab:hover {
+            background: #efefef;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            position: relative;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .product-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            color: #667eea;
+            font-size: 12px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .contact-info {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <h1>🌐 外贸网站后台管理系统</h1>
+            <p>管理您的产品、联系信息和网站内容</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('products')">📦 产品管理</button>
+            <button class="nav-tab" onclick="switchTab('contact')">📞 联系信息</button>
+            <button class="nav-tab" onclick="switchTab('company')">🏢 公司信息</button>
+        </div>
+        
+        <div class="content">
+            <div id="alert" class="alert"></div>
+            
+            <!-- 产品管理标签页 -->
+            <div id="products" class="tab-panel active">
+                <h2 class="section-title">产品管理</h2>
+                
+                <div style="background: #f0f4ff; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 15px; color: #667eea;">添加新产品</h3>
+                    
+                    <div class="form-group">
+                        <label>产品名称（中文）</label>
+                        <input type="text" id="productNameZh" placeholder="例如：优质面料">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>产品名称（英文）</label>
+                        <input type="text" id="productNameEn" placeholder="例如：Premium Fabric">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>产品描述（中文）</label>
+                            <textarea id="productDescZh" placeholder="产品详细描述..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>产品描述（英文）</label>
+                            <textarea id="productDescEn" placeholder="Product description..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>产品图片</label>
+                        <div class="file-upload">
+                            <input type="file" id="productImage" accept="image/*">
+                            <label for="productImage" class="file-upload-label">📤 选择图片</label>
+                            <div class="file-name" id="fileName"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>YouTube 视频链接</label>
+                            <input type="url" id="youtubeLink" placeholder="https://www.youtube.com/embed/...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Facebook 视频链接</label>
+                            <input type="url" id="facebookLink" placeholder="https://www.facebook.com/...">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Instagram 链接</label>
+                        <input type="url" id="instagramLink" placeholder="https://www.instagram.com/...">
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="addProduct()">✅ 添加产品</button>
+                </div>
+                
+                <h3 class="section-title">现有产品列表</h3>
+                <div class="product-list" id="productList"></div>
+            </div>
+            
+            <!-- 联系信息标签页 -->
+            <div id="contact" class="tab-panel">
+                <h2 class="section-title">联系信息管理</h2>
+                
+                <div class="form-group">
+                    <label>主要邮箱</label>
+                    <input type="email" id="emailMain" value="info@company.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>销售邮箱</label>
+                    <input type="email" id="emailSales" value="sales@company.com">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>电话（中国）</label>
+                        <input type="tel" id="phoneCn" value="+86-10-1234-5678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>电话（其他）</label>
+                        <input type="tel" id="phoneOther" value="+1-201-555-0123">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>WhatsApp 号码</label>
+                        <input type="tel" id="whatsapp" value="+8610123456789" placeholder="+86...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Facebook 页面链接</label>
+                        <input type="url" id="facebook" value="https://www.facebook.com/yourpage">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Instagram 账号链接</label>
+                    <input type="url" id="instagram" value="https://www.instagram.com/yourpage">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>工作时间（周一至周五）</label>
+                        <input type="text" id="workHoursWeekday" value="09:00 - 18:00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>工作时间（周末）</label>
+                        <input type="text" id="workHoursWeekend" value="10:00 - 16:00">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="saveContact()">💾 保存联系信息</button>
+            </div>
+            
+            <!-- 公司信息标签页 -->
+            <div id="company" class="tab-panel">
+                <h2 class="section-title">公司信息管理</h2>
+                
+                <div class="form-group">
+                    <label>公司名称</label>
+                    <input type="text" id="companyName" value="Foreign Trade Company">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>网站标题</label>
+                        <input type="text" id="siteTitle" value="Professional Foreign Trade Platform">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>网站描述</label>
+                        <input type="text" id="siteDescription" value="We are a professional foreign trade enterprise...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>首页简介（中文）</label>
+                    <textarea id="homeIntroZh" placeholder="输入首页简介..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>首页简介（英文）</label>
+                    <textarea id="homeIntroEn" placeholder="Enter home page introduction..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>公司优势（中文，用逗号分隔）</label>
+                    <input type="text" id="advantagesZh" value="产品质量卓越,客户服务优秀,交付时间准确,价格具有竞争力">
+                </div>
+                
+                <div class="form-group">
+                    <label>公司优势（英文，用逗号分隔）</label>
+                    <input type="text" id="advantagesEn" value="Excellent product quality,Superior customer service,Accurate delivery time,Competitive pricing">
+                </div>
+                
+                <button class="btn btn-primary" onclick="saveCompanyInfo()">💾 保存公司信息</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化产品列表
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            {
+                id: 1,
+                nameZh: '优质面料',
+                nameEn: 'Premium Fabric',
+                descZh: '100% 天然纤维，环保可持续，舒适耐用',
+                descEn: '100% Natural Fiber, Eco-friendly and Sustainable, Comfortable and Durable',
+                image: '/uploads/product-1.jpg',
+                youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                facebook: 'https://www.facebook.com',
+                instagram: 'https://www.instagram.com'
+            },
+            {
+                id: 2,
+                nameZh: '电子配件',
+                nameEn: 'Electronic Components',
+                descZh: '高精度制造，国际认证，长期质保',
+                descEn: 'High Precision Manufacturing, International Certification, Long-term Warranty',
+                image: '/uploads/product-2.jpg',
+                youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                facebook: 'https://www.facebook.com',
+                instagram: 'https://www.instagram.com'
+            }
+        ];
+        
+        function switchTab(tabName) {
+            // 隐藏所有标签页
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // 移除所有标签按钮的激活状态
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // 显示选中的标签页
+            document.getElementById(tabName).classList.add('active');
+            
+            // 激活选中的标签按钮
+            event.target.classList.add('active');
+        }
+        
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert show alert-${type}`;
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+            }, 3000);
+        }
+        
+        function renderProducts() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.nameZh}" onerror="this.style.display='none'">
+                        <span style="position: absolute; display: ${product.image === '/uploads/product-1.jpg' || product.image === '/uploads/product-2.jpg' ? 'none' : 'block'}">${product.image}</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${product.nameZh} / ${product.nameEn}</div>
+                        <div class="product-desc">${product.descZh}</div>
+                        <div class="product-desc">${product.descEn}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="editProduct(${product.id})">编辑</button>
+                            <button class="btn btn-danger" onclick="deleteProduct(${product.id})">删除</button>
+                        </div>
+                    </div>
+                `;
+                productList.appendChild(card);
+            });
+        }
+        
+        function addProduct() {
+            const nameZh = document.getElementById('productNameZh').value;
+            const nameEn = document.getElementById('productNameEn').value;
+            const descZh = document.getElementById('productDescZh').value;
+            const descEn = document.getElementById('productDescEn').value;
+            const image = document.getElementById('productImage').files[0];
+            const youtube = document.getElementById('youtubeLink').value;
+            const facebook = document.getElementById('facebookLink').value;
+            const instagram = document.getElementById('instagramLink').value;
+            
+            if (!nameZh || !nameEn || !descZh || !descEn) {
+                showAlert('❌ 请填写所有必填字段', 'error');
+                return;
+            }
+            
+            let imageUrl = '/uploads/product-default.jpg';
+            if (image) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imageUrl = e.target.result;
+                    saveNewProduct(nameZh, nameEn, descZh, descEn, imageUrl, youtube, facebook, instagram);
+                };
+                reader.readAsDataURL(image);
+            } else {
+                saveNewProduct(nameZh, nameEn, descZh, descEn, imageUrl, youtube, facebook, instagram);
+            }
+        }
+        
+        function saveNewProduct(nameZh, nameEn, descZh, descEn, image, youtube, facebook, instagram) {
+            const newProduct = {
+                id: Math.max(...products.map(p => p.id), 0) + 1,
+                nameZh,
+                nameEn,
+                descZh,
+                descEn,
+                image,
+                youtube,
+                facebook,
+                instagram
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // 清空表单
+            document.getElementById('productNameZh').value = '';
+            document.getElementById('productNameEn').value = '';
+            document.getElementById('productDescZh').value = '';
+            document.getElementById('productDescEn').value = '';
+            document.getElementById('productImage').value = '';
+            document.getElementById('youtubeLink').value = '';
+            document.getElementById('facebookLink').value = '';
+            document.getElementById('instagramLink').value = '';
+            document.getElementById('fileName').textContent = '';
+            
+            renderProducts();
+            showAlert('✅ 产品添加成功！', 'success');
+        }
+        
+        function deleteProduct(id) {
+            if (confirm('确定要删除这个产品吗？')) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                renderProducts();
+                showAlert('✅ 产品已删除', 'success');
+            }
+        }
+        
+        function editProduct(id) {
+            alert('编辑功能开发中...');
+        }
+        
+        function saveContact() {
+            const contact = {
+                emailMain: document.getElementById('emailMain').value,
+                emailSales: document.getElementById('emailSales').value,
+                phoneCn: document.getElementById('phoneCn').value,
+                phoneOther: document.getElementById('phoneOther').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                facebook: document.getElementById('facebook').value,
+                instagram: document.getElementById('instagram').value,
+                workHoursWeekday: document.getElementById('workHoursWeekday').value,
+                workHoursWeekend: document.getElementById('workHoursWeekend').value
+            };
+            
+            localStorage.setItem('contact', JSON.stringify(contact));
+            showAlert('✅ 联系信息已保存', 'success');
+        }
+        
+        function saveCompanyInfo() {
+            const company = {
+                name: document.getElementById('companyName').value,
+                siteTitle: document.getElementById('siteTitle').value,
+                siteDescription: document.getElementById('siteDescription').value,
+                homeIntroZh: document.getElementById('homeIntroZh').value,
+                homeIntroEn: document.getElementById('homeIntroEn').value,
+                advantagesZh: document.getElementById('advantagesZh').value,
+                advantagesEn: document.getElementById('advantagesEn').value
+            };
+            
+            localStorage.setItem('company', JSON.stringify(company));
+            showAlert('✅ 公司信息已保存', 'success');
+        }
+        
+        // 文件选择处理
+        document.getElementById('productImage').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                document.getElementById('fileName').textContent = '已选择: ' + this.files[0].name;
+            }
+        });
+        
+        // 页面加载时渲染产品列表
+        renderProducts();
+    </script>
+</body>
+</html>

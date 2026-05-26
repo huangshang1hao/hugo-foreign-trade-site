@@ -1,0 +1,46 @@
+baseURL = "https://example.com"
+languageCode = "en-us"
+title = "Foreign Trade Company"
+paginate = 10
+
+# 多语言配置
+defaultContentLanguage = "zh"
+defaultContentLanguageInSubdir = false
+
+[languages]
+[languages.zh]
+title = "外贸公司"
+languageName = "中文"
+weight = 1
+contentDir = "content/zh"
+
+[languages.en]
+title = "Foreign Trade Company"
+languageName = "English"
+weight = 2
+contentDir = "content/en"
+
+# 菜单配置
+[menu]
+[[menu.main]]
+name = "首页 / Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "产品 / Products"
+url = "/products/"
+weight = 2
+
+[[menu.main]]
+name = "联系我们 / Contact"
+url = "/contact/"
+weight = 3
+
+# 输出格式配置
+[outputs]
+home = ["HTML", "JSON"]
+
+# 参数配置
+[params]
+description = "Professional Foreign Trade Platform"

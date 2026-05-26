@@ -1,0 +1,51 @@
+{{ define "main" }}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        {{ if .Summary }}
+            <p class="page-description">{{ .Summary }}</p>
+        {{ end }}
+    </div>
+</section>
+
+<section class="page-content">
+    <div class="container">
+        {{ if eq .Section "products" }}
+            <div class="products-grid">
+                {{ range .Pages }}
+                    <div class="product-card">
+                        <div class="product-image">
+                            {{ if .Params.image }}
+                                <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+                            {{ else }}
+                                <div class="placeholder">{{ .Title }}</div>
+                            {{ end }}
+                        </div>
+                        <h3>{{ .Title }}</h3>
+                        <p>{{ .Summary }}</p>
+                        <a href="{{ .RelPermalink }}" class="btn">
+                            {{ if eq .Language "zh" }}查看详情{{ else }}View Details{{ end }}
+                        </a>
+                    </div>
+                {{ end }}
+            </div>
+        {{ else }}
+            <div class="content-list">
+                {{ range .Pages }}
+                    <article class="content-item">
+                        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                        {{ if .Params.date }}
+                            <time class="date">{{ .Params.date.Format "2006-01-02" }}</time>
+                        {{ end }}
+                        <p>{{ .Summary }}</p>
+                        <a href="{{ .RelPermalink }}" class="btn">
+                            {{ if eq .Language "zh" }}阅读更多{{ else }}Read More{{ end }}
+                        </a>
+                    </article>
+                {{ end }}
+            </div>
+        {{ end }}
+    </div>
+</section>
+
+{{ end }}

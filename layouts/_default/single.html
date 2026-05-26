@@ -1,0 +1,38 @@
+{{ define "main" }}
+<article class="single-page">
+    <div class="container">
+        <header class="article-header">
+            <h1>{{ .Title }}</h1>
+            {{ if .Params.date }}
+                <time class="date">{{ .Params.date.Format "2006-01-02" }}</time>
+            {{ end }}
+        </header>
+
+        {{ if .Params.image }}
+            <div class="article-image">
+                <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+            </div>
+        {{ end }}
+
+        <div class="article-content">
+            {{ .Content }}
+        </div>
+
+        {{ if .Params.price }}
+            <div class="product-info">
+                <p class="price">
+                    {{ if eq .Language "zh" }}价格:{{ else }}Price:{{ end }} 
+                    <strong>{{ .Params.price }}</strong>
+                </p>
+            </div>
+        {{ end }}
+
+        <footer class="article-footer">
+            <a href="{{ .Parent.RelPermalink }}" class="btn">
+                {{ if eq .Language "zh" }}← 返回列表{{ else }}← Back to List{{ end }}
+            </a>
+        </footer>
+    </div>
+</article>
+
+{{ end }}

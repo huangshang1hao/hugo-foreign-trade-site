@@ -1,0 +1,30 @@
+<header class="site-header">
+    <div class="container">
+        <div class="header-content">
+            <div class="site-branding">
+                <h1 class="site-title">
+                    <a href="{{ "/" | relURL }}">{{ .Site.Title }}</a>
+                </h1>
+                <p class="site-tagline">{{ .Site.Params.description }}</p>
+            </div>
+
+            <nav class="site-nav">
+                <ul class="nav-menu">
+                    {{ range .Site.Menus.main }}
+                        <li class="nav-item">
+                            <a href="{{ .URL | relURL }}" class="nav-link">{{ .Name }}</a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </nav>
+
+            <div class="language-switcher">
+                {{ if eq .Language "zh" }}
+                    <a href="{{ .RelPermalink | relLangURL "en" }}" class="lang-link">English</a>
+                {{ else }}
+                    <a href="{{ .RelPermalink | relLangURL "zh" }}" class="lang-link">中文</a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</header>
